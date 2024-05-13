@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
+    this.showAddToWishList = true,
   });
+
+  final bool showAddToWishList;
 
   @override
   Widget build(BuildContext context) {
@@ -72,26 +75,38 @@ class ProductCard extends StatelessWidget {
                           Text('3.4'),
                         ],
                       ),
-                      Card(
-                        color: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Icon(
-                            Icons.favorite_outline,
-                            size: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      _buildAddToWishListButton(),
                     ],
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddToWishListButton() {
+    return Visibility(
+      visible: showAddToWishList,
+      replacement: _getIconButton(Icons.delete),
+      child: _getIconButton(Icons.favorite_outline),
+    );
+  }
+
+  Widget _getIconButton(IconData icon) {
+    return Card(
+      color: AppColors.primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(2.0),
+        child: Icon(
+          icon,
+          size: 16,
+          color: Colors.white,
         ),
       ),
     );

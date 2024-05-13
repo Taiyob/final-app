@@ -1,5 +1,4 @@
-//import 'package:e_commerce_app/presentation/screens/email_verification_screen.dart';
-import 'package:e_commerce_app/presentation/screens/home_screen.dart';
+import 'package:e_commerce_app/presentation/screens/main_bottom_navbar_screen.dart';
 import 'package:e_commerce_app/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _moveToNextScreen() async{
     await Future.delayed(const Duration(seconds: 2,),);
-    Get.off(()=> const HomeScreen(),);
+    Get.off(()=> const MainBottomNavbarScreen(),);
   }
 
   @override
