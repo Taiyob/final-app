@@ -45,6 +45,11 @@ class _CraftyBayState extends State<CraftyBay> {
             ),
           ),
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primaryColor,
+          ),
+        ),
       ),
     );
   }
