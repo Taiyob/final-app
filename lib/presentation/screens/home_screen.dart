@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/presentation/state_holders/main_bottom_navbar_controller.dart';
 import 'package:e_commerce_app/presentation/utility/assets_path.dart';
 import 'package:e_commerce_app/presentation/widgets/app_bar_icon_button.dart';
 import 'package:e_commerce_app/presentation/widgets/category_item.dart';
@@ -6,6 +7,7 @@ import 'package:e_commerce_app/presentation/widgets/product_card.dart';
 import 'package:e_commerce_app/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,45 +21,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              buildSearchTextField(),
-              const SizedBox(height: 16),
-              const HomeCarouselSlider(),
-              const SizedBox(height: 16),
-              SectionHeader(
-                title: 'All Category',
-                onTapSeeAll: () {},
-              ),
-              const SizedBox(height: 10),
-              _buildCategoryListView(),
-              const SizedBox(height: 8),
-              SectionHeader(
-                title: 'Popular',
-                onTapSeeAll: () {},
-              ),
-              const SizedBox(height: 10),
-              _buildProductListView(),
-              const SizedBox(height: 8),
-              SectionHeader(
-                title: 'Special',
-                onTapSeeAll: () {},
-              ),
-              const SizedBox(height: 10),
-              _buildProductListView(),
-              const SizedBox(height: 8),
-              SectionHeader(
-                title: 'New',
-                onTapSeeAll: () {},
-              ),
-              const SizedBox(height: 10),
-              _buildProductListView(),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_){
+        Get.find<MainBottomNavbarController>().backToHome();
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                buildSearchTextField(),
+                const SizedBox(height: 16),
+                const HomeCarouselSlider(),
+                const SizedBox(height: 16),
+                SectionHeader(
+                  title: 'All Category',
+                  onTapSeeAll: () {},
+                ),
+                const SizedBox(height: 10),
+                _buildCategoryListView(),
+                const SizedBox(height: 8),
+                SectionHeader(
+                  title: 'Popular',
+                  onTapSeeAll: () {},
+                ),
+                const SizedBox(height: 10),
+                _buildProductListView(),
+                const SizedBox(height: 8),
+                SectionHeader(
+                  title: 'Special',
+                  onTapSeeAll: () {},
+                ),
+                const SizedBox(height: 10),
+                _buildProductListView(),
+                const SizedBox(height: 8),
+                SectionHeader(
+                  title: 'New',
+                  onTapSeeAll: () {},
+                ),
+                const SizedBox(height: 10),
+                _buildProductListView(),
+              ],
+            ),
           ),
         ),
       ),
