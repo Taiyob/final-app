@@ -3,7 +3,6 @@ import 'package:e_commerce_app/presentation/widgets/color_picker.dart';
 import 'package:e_commerce_app/presentation/widgets/product_carousel_slider.dart';
 import 'package:e_commerce_app/presentation/widgets/size_picker.dart';
 import 'package:e_commerce_app/presentation/widgets/wish_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 

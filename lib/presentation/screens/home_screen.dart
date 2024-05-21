@@ -1,7 +1,9 @@
+import 'package:e_commerce_app/presentation/state_holders/home_slider_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/main_bottom_navbar_controller.dart';
 import 'package:e_commerce_app/presentation/utility/assets_path.dart';
 import 'package:e_commerce_app/presentation/widgets/app_bar_icon_button.dart';
 import 'package:e_commerce_app/presentation/widgets/category_item.dart';
+import 'package:e_commerce_app/presentation/widgets/centered_circular_progess.dart';
 import 'package:e_commerce_app/presentation/widgets/home_carousel_slider.dart';
 import 'package:e_commerce_app/presentation/widgets/product_card.dart';
 import 'package:e_commerce_app/presentation/widgets/section_header.dart';
@@ -23,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (_){
+      onPopInvoked: (_) {
         Get.find<MainBottomNavbarController>().backToHome();
       },
       child: Scaffold(
@@ -35,7 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 buildSearchTextField(),
                 const SizedBox(height: 16),
-                const HomeCarouselSlider(),
+                GetBuilder<HomeSliderController>(builder: (sliderController) {
+                  if(sliderController.inProgress){
+                    return const SizedBox(height: 200, child: CenteredCircularProgressWidget(),);
+                  }
+                  return HomeCarouselSlider(
+                    sliderList: sliderController.sliderList,
+                  );
+                }),
                 const SizedBox(height: 16),
                 SectionHeader(
                   title: 'All Category',
@@ -162,5 +171,3 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 }
-
-
