@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/data/models/product.dart';
 import 'package:e_commerce_app/presentation/screens/product_details_screen.dart';
 import 'package:e_commerce_app/presentation/utility/app_colors.dart';
 import 'package:e_commerce_app/presentation/utility/assets_path.dart';
@@ -8,10 +9,11 @@ import 'package:get/get.dart';
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
-    this.showAddToWishList = true,
+    this.showAddToWishList = true, required this.product,
   });
 
   final bool showAddToWishList;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +43,18 @@ class ProductCard extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(AssetsPath.productImagePng),
+                  child: Image.network(product.image ?? ''),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sports Shoe 320k Special Edition',
+                      product.title ?? '',
                       maxLines: 2,
-                      style: TextStyle(
+                      style: const TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 13,
                         color: Colors.grey,
@@ -65,8 +67,8 @@ class ProductCard extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          '\$30',
-                          style: TextStyle(
+                          '\$${product.price}',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
@@ -74,15 +76,15 @@ class ProductCard extends StatelessWidget {
                         ),
                         Wrap(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.star,
                               color: Colors.amber,
                               size: 20,
                             ),
-                            Text('3.4'),
+                            Text('${product.star}'),
                           ],
                         ),
-                        WishButton(),
+                        WishButton(showAddToWishList: showAddToWishList,),
                       ],
                     ),
                   ],

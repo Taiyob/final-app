@@ -5,6 +5,7 @@ import 'package:e_commerce_app/presentation/screens/wish_list_screen.dart';
 import 'package:e_commerce_app/presentation/state_holders/category_list_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/home_slider_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/main_bottom_navbar_controller.dart';
+import 'package:e_commerce_app/presentation/state_holders/popular_product_list_controller.dart';
 import 'package:e_commerce_app/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ class _MainBottomNavbarScreenState extends State<MainBottomNavbarScreen> {
     super.initState();
     _homeSliderController.getSliders();
     Get.find<CategoryListController>().getCategory();
+    Get.find<PopularProductListController>().getPopularProductList();
   }
 
   @override
