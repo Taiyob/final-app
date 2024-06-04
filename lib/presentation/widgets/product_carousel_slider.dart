@@ -3,7 +3,9 @@ import 'package:e_commerce_app/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProductCarouselSlider extends StatefulWidget {
-  const ProductCarouselSlider({super.key});
+  const ProductCarouselSlider({super.key, required this.images});
+
+  final List<String> images;
 
   @override
   State<ProductCarouselSlider> createState() => _ProductCarouselSliderState();
@@ -40,17 +42,15 @@ class _ProductCarouselSliderState extends State<ProductCarouselSlider> {
           onPageChanged: (index, _) {
             _selectedPageIndex.value = index;
           }),
-      items: [1, 2, 3, 4, 5].map((i) {
+      items: widget.images.map((image) {
         return Builder(
           builder: (BuildContext context) {
             return Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.grey.shade300,
-                alignment: Alignment.center,
-                child: Text(
-                  'text $i',
-                  style: const TextStyle(fontSize: 16.0),
-                ));
+              width: MediaQuery.of(context).size.width,
+              color: Colors.grey.shade300,
+              alignment: Alignment.center,
+              child: Image.network(image, fit: BoxFit.cover,),
+            );
           },
         );
       }).toList(),
@@ -64,17 +64,19 @@ class _ProductCarouselSliderState extends State<ProductCarouselSlider> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < widget.images.length; i++)
               Container(
                 width: 12,
                 height: 12,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
-                  color: i == currentPage ? AppColors.primaryColor : Colors.white,
+                  color:
+                      i == currentPage ? AppColors.primaryColor : Colors.white,
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(
-                    color:
-                        i == currentPage ? AppColors.primaryColor : Colors.white,
+                    color: i == currentPage
+                        ? AppColors.primaryColor
+                        : Colors.white,
                     width: 2,
                   ),
                 ),

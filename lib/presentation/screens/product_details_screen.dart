@@ -1,13 +1,17 @@
+import 'package:e_commerce_app/data/models/product_details_model.dart';
+import 'package:e_commerce_app/presentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce_app/presentation/utility/app_colors.dart';
-import 'package:e_commerce_app/presentation/widgets/color_picker.dart';
 import 'package:e_commerce_app/presentation/widgets/product_carousel_slider.dart';
 import 'package:e_commerce_app/presentation/widgets/size_picker.dart';
 import 'package:e_commerce_app/presentation/widgets/wish_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({super.key, required this.productId});
+
+  final int productId;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -17,121 +21,154 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _counterValue = 1;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.find<ProductDetailsController>().getProductDetails(widget.productId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Details'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const ProductCarouselSlider(),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+        appBar: AppBar(
+          title: const Text('Product Details'),
+        ),
+        body: GetBuilder<ProductDetailsController>(
+          builder: (productDetailsController) {
+            if (productDetailsController.inProgress) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (productDetailsController.errorMessage.isNotEmpty) {
+              return Center(
+                child: Text(productDetailsController.errorMessage),
+              );
+            }
+            ProductDetailsModel productDetails = productDetailsController.productDetailsModel;
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Nike Shoe 2024 Latest Edition 80AEFTA',
+                        ProductCarouselSlider(images: [
+                          productDetails.img1 ?? '',
+                          productDetails.img2 ?? '',
+                          productDetails.img3 ?? '',
+                          productDetails.img4 ?? '',
+                        ],),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      productDetails.product?.title ?? '',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        color: Colors.black.withOpacity(0.8),
+                                      ),
+                                    ),
+                                  ),
+                                  _buildCounter(),
+                                ],
+                              ),
+                              _buildReviewSection(productDetails),
+                              const Text(
+                                'Color',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  color: Colors.black.withOpacity(0.8),
+                                  fontSize: 16,
                                 ),
                               ),
-                            ),
-                            _buildCounter(),
-                          ],
-                        ),
-                        _buildReviewSection(),
-                        const Text(
-                          'Color',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              // ColorPicker(
+                              //   colors: const [
+                              //     Colors.black,
+                              //     Colors.red,
+                              //     Colors.amber,
+                              //     Colors.blue,
+                              //     Colors.purple,
+                              //   ],
+                              //   onChange: (Color selectedColors) {
+                              //     print(selectedColors);
+                              //   },
+                              // ),
+                              SizePicker(
+                                sizes: productDetails.color?.split(',') ?? [],
+                                onChange: (String size) {},
+                                isRounded: false,
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              const Text(
+                                'Size',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              SizePicker(
+                                sizes: productDetails.size?.split(',') ?? [],
+                                onChange: (String size) {},
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              const Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Text(productDetails.product?.shortDes ?? '',),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(productDetails.des ?? '',),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        ColorPicker(
-                          colors: const [
-                            Colors.black,
-                            Colors.red,
-                            Colors.amber,
-                            Colors.blue,
-                            Colors.purple,
-                          ],
-                          onChange: (Color selectedColors) {
-                            print(selectedColors);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Size',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        SizePicker(
-                          sizes: const ['M', 'L', 'S', 'XL', 'XXL'],
-                          onChange: (String size) {},
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Description',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          '''It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.''',
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          _buildAddToCart(),
-        ],
-      ),
-    );
+                ),
+                _buildAddToCart(productDetails),
+              ],
+            );
+          },
+        ));
   }
 
-  Widget _buildReviewSection() {
+  Widget _buildReviewSection(ProductDetailsModel productDetails) {
     return Wrap(
       spacing: 5,
       alignment: WrapAlignment.start,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        const Wrap(
+        Wrap(
           children: [
-            Icon(
+            const Icon(
               Icons.star,
               color: Colors.amber,
               size: 20,
             ),
-            Text('3.4'),
+            Text('${productDetails.product?.star ?? 0}'),
           ],
         ),
         TextButton(
@@ -157,7 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildAddToCart() {
+  Widget _buildAddToCart(ProductDetailsModel productDetails) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -170,7 +207,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildPrice(),
+          _buildPrice(productDetails),
           SizedBox(
             width: 140,
             child: ElevatedButton(
@@ -183,11 +220,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildPrice() {
-    return const Column(
+  Widget _buildPrice(ProductDetailsModel productDetails) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Price',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -195,8 +232,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
         Text(
-          '\$1200',
-          style: TextStyle(
+          '\$${productDetails.product?.price ?? 0}',
+          style: const TextStyle(
             fontSize: 24,
             color: AppColors.primaryColor,
             fontWeight: FontWeight.bold,
