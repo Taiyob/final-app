@@ -1,6 +1,9 @@
+import 'package:e_commerce_app/data/models/cart_model.dart';
 import 'package:e_commerce_app/data/models/product_details_model.dart';
+import 'package:e_commerce_app/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce_app/presentation/utility/app_colors.dart';
+import 'package:e_commerce_app/presentation/widgets/centered_circular_progess.dart';
 import 'package:e_commerce_app/presentation/widgets/product_carousel_slider.dart';
 import 'package:e_commerce_app/presentation/widgets/size_picker.dart';
 import 'package:e_commerce_app/presentation/widgets/wish_button.dart';
@@ -19,6 +22,8 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _counterValue = 1;
+  String? _selectedColor;
+  String? _selectedSize;
 
   @override
   void initState() {
@@ -46,6 +51,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               );
             }
             ProductDetailsModel productDetails = productDetailsController.productDetailsModel;
+            List<String> colors = productDetails.color?.split(',') ?? [];
+            List<String> sizes = productDetails.size?.split(',') ?? [];
+            _selectedSize = sizes.first;
+            _selectedColor = colors.first;
             return Column(
               children: [
                 Expanded(
@@ -102,8 +111,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               //   },
                               // ),
                               SizePicker(
-                                sizes: productDetails.color?.split(',') ?? [],
-                                onChange: (String size) {},
+                                sizes: colors,
+                                onChange: (String color) {
+                                  _selectedColor = color;
+                                },
                                 isRounded: false,
                               ),
                               const SizedBox(
@@ -120,8 +131,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 height: 16,
                               ),
                               SizePicker(
-                                sizes: productDetails.size?.split(',') ?? [],
-                                onChange: (String size) {},
+                                sizes: sizes,
+                                onChange: (String size) {
+                                  _selectedColor = size;
+                                },
                               ),
                               const SizedBox(
                                 height: 16,
@@ -210,9 +223,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _buildPrice(productDetails),
           SizedBox(
             width: 140,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Add to Cart'),
+            child: GetBuilder<AddToCartController>(
+              builder: (addToCartController){
+                if(addToCartController.inProgress){
+                  return const CenteredCircularProgressWidget();
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    CartModel cartModel = CartModel(productId: widget.productId, color: _selectedColor ?? '', size: _selectedSize ?? '', quantity: _counterValue);
+                    addToCartController.addToCart(cartModel);
+                  },
+                  child: const Text('Add to Cart'),
+                );
+              },
             ),
           ),
         ],
