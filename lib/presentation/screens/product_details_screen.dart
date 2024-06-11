@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/data/models/cart_model.dart';
 import 'package:e_commerce_app/data/models/product_details_model.dart';
 import 'package:e_commerce_app/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:e_commerce_app/presentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/product_details_controller.dart';
 import 'package:e_commerce_app/presentation/utility/app_colors.dart';
 import 'package:e_commerce_app/presentation/widgets/centered_circular_progess.dart';
@@ -50,7 +51,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Text(productDetailsController.errorMessage),
               );
             }
-            ProductDetailsModel productDetails = productDetailsController.productDetailsModel;
+            ProductDetailsModel productDetails =
+                productDetailsController.productDetailsModel;
             List<String> colors = productDetails.color?.split(',') ?? [];
             List<String> sizes = productDetails.size?.split(',') ?? [];
             _selectedSize = sizes.first;
@@ -61,12 +63,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        ProductCarouselSlider(images: [
-                          productDetails.img1 ?? '',
-                          productDetails.img2 ?? '',
-                          productDetails.img3 ?? '',
-                          productDetails.img4 ?? '',
-                        ],),
+                        ProductCarouselSlider(
+                          images: [
+                            productDetails.img1 ?? '',
+                            productDetails.img2 ?? '',
+                            productDetails.img3 ?? '',
+                            productDetails.img4 ?? '',
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -149,11 +153,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               const SizedBox(
                                 height: 16,
                               ),
-                              Text(productDetails.product?.shortDes ?? '',),
+                              Text(
+                                productDetails.product?.shortDes ?? '',
+                              ),
                               const SizedBox(
                                 height: 8,
                               ),
-                              Text(productDetails.des ?? '',),
+                              Text(
+                                productDetails.des ?? '',
+                              ),
                             ],
                           ),
                         ),
@@ -188,7 +196,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           onPressed: () {},
           child: const Text('Reviews'),
         ),
-        const WishButton(showAddToWishList: true),
+        GetBuilder<AddToWishListController>(
+          builder: (addToWishListController) {
+            if (addToWishListController.inProgress) {
+              return Transform.scale(scale: 0.4, child: const CircularProgressIndicator(),);
+            }
+            return WishButton(
+              showAddToWishList: true,
+              //isSelected: true,
+              onTap: () {
+                addToWishListController.addToWishList(widget.productId);
+              },
+            );
+          },
+        ),
       ],
     );
   }
@@ -224,13 +245,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           SizedBox(
             width: 140,
             child: GetBuilder<AddToCartController>(
-              builder: (addToCartController){
-                if(addToCartController.inProgress){
+              builder: (addToCartController) {
+                if (addToCartController.inProgress) {
                   return const CenteredCircularProgressWidget();
                 }
                 return ElevatedButton(
                   onPressed: () {
-                    CartModel cartModel = CartModel(productId: widget.productId, color: _selectedColor ?? '', size: _selectedSize ?? '', quantity: _counterValue);
+                    CartModel cartModel = CartModel(
+                        productId: widget.productId,
+                        color: _selectedColor ?? '',
+                        size: _selectedSize ?? '',
+                        quantity: _counterValue);
                     addToCartController.addToCart(cartModel);
                   },
                   child: const Text('Add to Cart'),

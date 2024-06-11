@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:e_commerce_app/presentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/category_list_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/home_slider_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/main_bottom_navbar_controller.dart';
@@ -9,6 +10,7 @@ import 'package:e_commerce_app/presentation/state_holders/product_list_by_catego
 import 'package:e_commerce_app/presentation/state_holders/special_product_list_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/verify_email_controller.dart';
 import 'package:e_commerce_app/presentation/state_holders/verify_otp_controller.dart';
+import 'package:e_commerce_app/presentation/state_holders/wish_list_controller.dart';
 import 'package:get/get.dart';
 
 class ControllerBinder extends Bindings {
@@ -25,5 +27,7 @@ class ControllerBinder extends Bindings {
     Get.put(AddToCartController());
     Get.put(VerifyEmailController());
     Get.put(VerifyOTPController());
+    Get.put(AddToWishListController());
+    Get.put(WishListController());
   }
 }
