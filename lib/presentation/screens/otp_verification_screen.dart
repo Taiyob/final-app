@@ -142,7 +142,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         inactiveFillColor: Colors.transparent,
         selectedFillColor: Colors.white,
       ),
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       enableActiveFill: true,
       controller: _otpTEController,
       appContext: context,

@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/presentation/screens/main_bottom_navbar_screen.dart';
+import 'package:e_commerce_app/presentation/state_holders/user_auth_controller.dart';
 import 'package:e_commerce_app/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _moveToNextScreen() async{
     await Future.delayed(const Duration(seconds: 2,),);
+    await UserAuthController.getUserToken();
     Get.off(()=> const MainBottomNavbarScreen(),);
   }
 

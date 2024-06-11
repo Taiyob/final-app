@@ -52,7 +52,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     height: 24,
                   ),
                   TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    //autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _emailTEController,
                     decoration: const InputDecoration(
                       hintText: 'Email',
@@ -61,10 +61,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       if (value?.isEmpty ?? true) {
                         return 'Enter Your Email';
                       }
-                      if (Constant.emailValidatorRegExp.hasMatch(value!) ==
-                          false) {
-                        return 'Enter a Valid Email Address';
-                      }
+                      // if (Constant.emailValidatorRegExp.hasMatch(value!) ==
+                      //     false) {
+                      //   return 'Enter a Valid Email Address';
+                      // }
                       return null;
                     },
                   ),
